@@ -31,6 +31,6 @@
             <property name="enableSubPackages" value="true"/>  
         </javaClientGenerator>  
         <!-- 要生成哪些表-->  
-        <table tableName="member" domainObjectName="Member" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>    
+        <table tableName="password" domainObjectName="Password" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>    
     </context>  
 </generatorConfiguration>  

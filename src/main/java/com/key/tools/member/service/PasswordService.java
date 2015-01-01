@@ -1,8 +1,8 @@
-package com.key.tools.member;
+package com.key.tools.member.service;
 
-import com.key.tools.member.db.model.Member;
+import com.key.tools.member.db.model.Password;
 
-public interface MemberManager
+public interface PasswordService
 {
 	/**
 	 * 添加会员并返回会员ID
@@ -10,7 +10,7 @@ public interface MemberManager
 	 * @param password
 	 * @return
 	 */
-	public int addMember(String name,String password);
+	public long addMember(String password);
 	
 	/**
 	 * 删除会员
@@ -26,7 +26,7 @@ public interface MemberManager
 	 * @param newPassword
 	 * @return
 	 */
-	public boolean updatePassword(Long id,String password,String newPassword);
+	public int updatePassword(Long id,String password,String newPassword);
 	
 	/**
 	 * 验证密码
@@ -34,13 +34,13 @@ public interface MemberManager
 	 * @param password
 	 * @return
 	 */
-	public boolean verifyPassword(Long id,String password);
+	public int verifyPassword(Long id,String password);
 	
 	/**
 	 * 获取会员信息（名字和密码）
 	 * @param id
 	 * @return
 	 */
-	public Member getMember(Long id);
+	public Password getPassword(Long id);
 	
 }
