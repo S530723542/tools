@@ -415,6 +415,7 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override
+	@Transactional
 	public int setPassword(Long id, String password)
 	{
 		User record=new User();
