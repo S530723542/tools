@@ -190,10 +190,10 @@ public class UserServiceImpl implements UserService
 			return Constant.NOT_EXIST;
 		}
 		User record = new User();
-		user.setId(id);
-		user.setIsDelete(Constant.IS_DELETE);
+		record.setId(id);
+		record.setIsDelete(Constant.IS_DELETE);
 		Date now = new Date(System.currentTimeMillis());
-		user.setMotifyTime(now);
+		record.setMotifyTime(now);
 		userMapper.updateByPrimaryKeySelective(record);
 		return Constant.SUCCESS;
 	}
@@ -299,10 +299,10 @@ public class UserServiceImpl implements UserService
 			return Constant.NOT_MATCH;
 		}
 		User record = new User();
-		user.setId(id);
+		record.setId(id);
 		Date now = new Date(System.currentTimeMillis());
-		user.setMotifyTime(now);
-		user.setPassword(newPassword);
+		record.setMotifyTime(now);
+		record.setPassword(newPassword);
 		userMapper.updateByPrimaryKeySelective(record);
 		logger.info("[motifyPassword] : [id:"+id+"] SUCCESS!");
 		return Constant.SUCCESS;
@@ -376,7 +376,7 @@ public class UserServiceImpl implements UserService
 			return Constant.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
-			logger.error("[getUserByName] : [nemail:" + email + "] [size:"
+			logger.error("[getUserByName] : [email:" + email + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
 			return Constant.MORE_THAN_ONE;
 		}
@@ -401,6 +401,45 @@ public class UserServiceImpl implements UserService
 		 userMapper.insertAndReturnId(user);
 		logger.info("[addUser] : [id:"+user.getId()+"] SUCCESS!");
 		return user.getId();
+	}
+
+	@Override
+	public User getUserById(Long id)
+	{
+		User user=userMapper.selectByPrimaryKey(id);
+		if (user==null||Constant.IS_DELETE.equals(user.getIsDelete()))
+		{
+			return null;
+		}
+		return user;
+	}
+
+	@Override
+	public int setPassword(Long id, String password)
+	{
+		User record=new User();
+		record.setId(id);
+		record.setIsDelete(Constant.IS_AVAILABLE);
+		List<User> list=userMapper.selectBySelectiveForUpdate(record);
+		if (list.size() == 0)
+		{
+			return Constant.NOT_EXIST;
+		} else if (list.size() > 1)
+		{
+			logger.error("[setPassword] : [id:" + id + "] [size:"
+					+ list.size() + "] name is exist and more than one!");
+			return Constant.MORE_THAN_ONE;
+		}
+		User user = list.get(0);
+		if (user.getPassword()!=null)
+		{
+			return Constant.NOT_MATCH;
+		}
+		user=new User();
+		user.setId(id);
+		user.setPassword(password);
+		userMapper.updateByPrimaryKeySelective(user);
+		return Constant.SUCCESS;
 	}
 
 }

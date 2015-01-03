@@ -2,6 +2,7 @@ package com.key.tools;
 
 import javax.annotation.Resource;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,19 @@ public class UserServiceTest
 	public void testAdd()
 	{
 		long id=userService.addUser();
-		System.out.println(id);
+		Assert.assertTrue(id>0);
+	}
+	
+	@Test
+	public void testDeleteUser()
+	{
+		userService.deleteUser(3L);
+		User user=userService.getUserById(3L);
+		Assert.assertNull(user);
+	}
+	
+	public void test()
+	{
+		
 	}
 }

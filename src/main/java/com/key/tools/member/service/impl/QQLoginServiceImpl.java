@@ -87,7 +87,7 @@ public class QQLoginServiceImpl implements QQLoginService
 		}
 
 		QQLogin qqLogin = new QQLogin();
-		record.setUserId(userId);
+		qqLogin.setUserId(userId);
 		list = qqLoginMapper.selectBySelective(qqLogin);
 		if (list.size() == 0)
 		{
@@ -103,8 +103,8 @@ public class QQLoginServiceImpl implements QQLoginService
 		qqLogin.setId(list.get(0).getId());
 		qqLogin.setQq(qq);
 		Date now = new Date(System.currentTimeMillis());
-		record.setMotifyTime(now);
-		qqLoginMapper.updateByPrimaryKeySelective(record);
+		qqLogin.setMotifyTime(now);
+		qqLoginMapper.updateByPrimaryKeySelective(qqLogin);
 		logger.info("[updateQQ] : [userId:" + userId + "] [qq:" + qq
 				+ "] SUCCESS!");
 		return Constant.SUCCESS;

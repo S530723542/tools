@@ -1,5 +1,6 @@
 package com.key.tools;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,19 @@ public class QQLoginServiceTest
 	@Test
 	public void loginByQQTest()
 	{
-		long id=qqLoginService.loginByQQ(232, "test");
-		System.out.println(id);
+		long id1=qqLoginService.loginByQQ(2321, "test11");
+		long id2=qqLoginService.loginByQQ(2321, "test11");
+		Assert.assertTrue(id1>0);
+		Assert.assertEquals(id1, id2);
 	}
 	
 	@Test
-	public void loginByQQ1Test()
+	public void updateQQTest()
 	{
-		long id=qqLoginService.updateQQ(6L, 530);
-		System.out.println(id);
+		qqLoginService.updateQQ(6L, 530);
+		qqLoginService.updateQQ(6L, 531);
+		long id=qqLoginService.getUserIdByQQ(531);
+		Assert.assertTrue(id==6L);
 	}
+	
 }

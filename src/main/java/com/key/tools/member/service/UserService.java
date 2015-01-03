@@ -17,6 +17,8 @@ public interface UserService
 	
 	public User getUserByEmail(String email);
 	
+	public User getUserById(Long id);
+	
 	public int deleteUser(Long id);
 	
 	/**
@@ -36,5 +38,7 @@ public interface UserService
 	public long verifyPasswordByPhone(Integer phone,String password);
 	
 	public long verifyPasswordByEmail(String email,String password);
+	
+	public int setPassword(Long id,String password);
 	
 }
