@@ -5,22 +5,25 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.key.tools.common.Constant;
 import com.key.tools.member.db.dao.UserMapper;
 import com.key.tools.member.db.model.User;
-import com.key.tools.member.service.UserService;
+import com.key.tools.member.service.LocalLoginService;
 
-public class UserServiceImpl implements UserService
+@Service
+public class LocalLoginServiceImpl implements LocalLoginService
 {
-	Logger		logger	= Logger.getLogger(UserServiceImpl.class);
+	Logger		logger	= Logger.getLogger(LocalLoginServiceImpl.class);
 
 	@Autowired
 	UserMapper	userMapper;
 
 	@Override
-	public long addUser(String name, Integer phone, String email,
+	@Transactional
+	public long addLocalLogin(String name, Integer phone, String email,
 			String password)
 	{
 		User user = new User();
@@ -30,7 +33,7 @@ public class UserServiceImpl implements UserService
 			User record = new User();
 			record.setIsDelete(Constant.IS_AVAILABLE);
 			record.setUserName(name);
-			List<User> list = userMapper.selectBySelective(record);
+			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
 			{
 				user.setUserName(name);
@@ -55,7 +58,7 @@ public class UserServiceImpl implements UserService
 			User record = new User();
 			record.setIsDelete(Constant.IS_AVAILABLE);
 			record.setPhone(phone);
-			List<User> list = userMapper.selectBySelective(record);
+			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
 			{
 				user.setPhone(phone);
@@ -80,7 +83,7 @@ public class UserServiceImpl implements UserService
 			User record = new User();
 			record.setIsDelete(Constant.IS_AVAILABLE);
 			record.setEmail(email);
-			List<User> list = userMapper.selectBySelective(record);
+			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
 			{
 				user.setEmail(email);
@@ -104,8 +107,10 @@ public class UserServiceImpl implements UserService
 		Date now = new Date(System.currentTimeMillis());
 		user.setCreateTime(now);
 		user.setMotifyTime(now);
-		userMapper.insertSelective(user);
-		return Constant.SUCCESS;
+		userMapper.insertAndReturnId(user);
+		logger.info("[addLocalLogin] : [name:" + name + "], [phone:" + phone
+				+ "], [email:" + email + "], [password:" + password + "] SUCCESS!");
+		return user.getId();
 	}
 
 	@Override
@@ -126,7 +131,7 @@ public class UserServiceImpl implements UserService
 		{
 			logger.error("[getUserByName] : [name:" + name + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
-			return list.get(0);
+			return null;
 		}
 
 	}
@@ -149,7 +154,7 @@ public class UserServiceImpl implements UserService
 		{
 			logger.error("[getUserByPhone] : [phone:" + phone + "] [size:"
 					+ list.size() + "] phone is exist and more than one!");
-			return list.get(0);
+			return null;
 		}
 	}
 
@@ -171,12 +176,11 @@ public class UserServiceImpl implements UserService
 		{
 			logger.error("[getUserByEmail] : [email:" + email + "] [size:"
 					+ list.size() + "] email is exist and more than one!");
-			return list.get(0);
+			return null;
 		}
 	}
 
 	@Override
-	@Transactional
 	public int deleteUser(Long id)
 	{
 
@@ -196,7 +200,8 @@ public class UserServiceImpl implements UserService
 
 	@Override
 	@Transactional
-	public int updateUserMsg(Long id, String name, Integer phone, String email)
+	public int updateLocalLoginMsg(Long id, String name, Integer phone,
+			String email)
 	{
 		User user = new User();
 		// userName检查
@@ -205,7 +210,7 @@ public class UserServiceImpl implements UserService
 			User record = new User();
 			record.setIsDelete(Constant.IS_AVAILABLE);
 			record.setUserName(name);
-			List<User> list = userMapper.selectBySelective(record);
+			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
 			{
 				user.setUserName(name);
@@ -230,7 +235,7 @@ public class UserServiceImpl implements UserService
 			User record = new User();
 			record.setIsDelete(Constant.IS_AVAILABLE);
 			record.setPhone(phone);
-			List<User> list = userMapper.selectBySelective(record);
+			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
 			{
 				user.setPhone(phone);
@@ -255,7 +260,7 @@ public class UserServiceImpl implements UserService
 			User record = new User();
 			record.setIsDelete(Constant.IS_AVAILABLE);
 			record.setEmail(email);
-			List<User> list = userMapper.selectBySelective(record);
+			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
 			{
 				user.setEmail(email);
@@ -282,9 +287,9 @@ public class UserServiceImpl implements UserService
 
 	@Override
 	@Transactional
-	public int motifyUserPassword(Long id, String password, String newPassword)
+	public int motifyPassword(Long id, String password, String newPassword)
 	{
-		User user = userMapper.selectByPrimaryKey(id);
+		User user = userMapper.selectByPrimaryKeyForUpdate(id);
 		if (user == null || Constant.IS_DELETE.equals(user.getIsDelete()))
 		{
 			return Constant.NOT_EXIST;
@@ -299,24 +304,26 @@ public class UserServiceImpl implements UserService
 		user.setMotifyTime(now);
 		user.setPassword(newPassword);
 		userMapper.updateByPrimaryKeySelective(record);
+		logger.info("[motifyPassword] : [id:"+id+"] SUCCESS!");
 		return Constant.SUCCESS;
 	}
 
 	@Override
-	public int verifyPasswordByName(String name, String password)
+	public long verifyPasswordByName(String name, String password)
 	{
 		User record = new User();
 		record.setUserName(name);
 		record.setIsDelete(Constant.IS_AVAILABLE);
 		List<User> list = userMapper.selectBySelective(record);
 
-		if (list.size() == 1)
+		if (list.size() == 0)
 		{
 			return Constant.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[getUserByName] : [name:" + name + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
+			return Constant.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (!user.getPassword().equals(password))
@@ -324,26 +331,27 @@ public class UserServiceImpl implements UserService
 			return Constant.NOT_MATCH;
 		} else
 		{
-			return Constant.SUCCESS;
+			return user.getId();
 		}
 
 	}
 
 	@Override
-	public int verifyPasswordByPhone(Integer phone, String password)
+	public long verifyPasswordByPhone(Integer phone, String password)
 	{
 		User record = new User();
 		record.setPhone(phone);
 		record.setIsDelete(Constant.IS_AVAILABLE);
 		List<User> list = userMapper.selectBySelective(record);
 
-		if (list.size() == 1)
+		if (list.size() == 0)
 		{
 			return Constant.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[getUserByName] : [phone:" + phone + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
+			return Constant.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (!user.getPassword().equals(password))
@@ -351,25 +359,26 @@ public class UserServiceImpl implements UserService
 			return Constant.NOT_MATCH;
 		} else
 		{
-			return Constant.SUCCESS;
+			return user.getId();
 		}
 	}
 
 	@Override
-	public int verifyPasswordByEmail(String email, String password)
+	public long verifyPasswordByEmail(String email, String password)
 	{
 		User record = new User();
 		record.setEmail(email);
 		record.setIsDelete(Constant.IS_AVAILABLE);
 		List<User> list = userMapper.selectBySelective(record);
 
-		if (list.size() == 1)
+		if (list.size() == 0)
 		{
 			return Constant.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[getUserByName] : [nemail:" + email + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
+			return Constant.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (!user.getPassword().equals(password))
@@ -377,8 +386,21 @@ public class UserServiceImpl implements UserService
 			return Constant.NOT_MATCH;
 		} else
 		{
-			return Constant.SUCCESS;
+			return user.getId();
 		}
+	}
+
+	@Override
+	public long addUser()
+	{
+		User user = new User();
+		user.setIsDelete(Constant.IS_AVAILABLE);
+		Date now = new Date(System.currentTimeMillis());
+		user.setCreateTime(now);
+		user.setMotifyTime(now);
+		long id = userMapper.insertAndReturnId(user);
+		logger.info("[addUser] : [id:"+id+"] SUCCESS!");
+		return id;
 	}
 
 }

@@ -49,4 +49,8 @@ public interface UserMapper {
     long insertAndReturnId(User record);
     
     List<User> selectBySelective(User record);
+    
+    List<User> selectBySelectiveForUpdate(User record);
+    
+    User selectByPrimaryKeyForUpdate(Long id);
 }
