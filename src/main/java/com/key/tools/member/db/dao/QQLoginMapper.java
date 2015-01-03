@@ -3,6 +3,7 @@ package com.key.tools.member.db.dao;
 import java.util.List;
 
 import com.key.tools.member.db.model.QQLogin;
+import com.key.tools.member.db.model.QQLoginExt;
 
 public interface QQLoginMapper {
     /**
@@ -53,9 +54,7 @@ public interface QQLoginMapper {
      */
     int updateByPrimaryKey(QQLogin record);
     
+    List<QQLogin> selectByExtSelectiveForUpdate(QQLoginExt record);
+    
     List<QQLogin> selectBySelective(QQLogin record);
-    
-    List<QQLogin> selectBySelectiveForUpdate(QQLogin record);
-    
-    int insertAndReturnId(QQLogin record);
 }

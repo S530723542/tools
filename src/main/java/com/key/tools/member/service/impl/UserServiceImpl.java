@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.key.tools.common.Constant;
 import com.key.tools.member.db.dao.UserMapper;
 import com.key.tools.member.db.model.User;
-import com.key.tools.member.service.LocalLoginService;
+import com.key.tools.member.service.UserService;
 
 @Service
-public class LocalLoginServiceImpl implements LocalLoginService
+public class UserServiceImpl implements UserService
 {
-	Logger		logger	= Logger.getLogger(LocalLoginServiceImpl.class);
+	Logger		logger	= Logger.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	UserMapper	userMapper;
@@ -398,9 +398,9 @@ public class LocalLoginServiceImpl implements LocalLoginService
 		Date now = new Date(System.currentTimeMillis());
 		user.setCreateTime(now);
 		user.setMotifyTime(now);
-		long id = userMapper.insertAndReturnId(user);
-		logger.info("[addUser] : [id:"+id+"] SUCCESS!");
-		return id;
+		 userMapper.insertAndReturnId(user);
+		logger.info("[addUser] : [id:"+user.getId()+"] SUCCESS!");
+		return user.getId();
 	}
 
 }

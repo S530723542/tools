@@ -6,7 +6,6 @@ create table qq_login
     qq int(11) comment "用户QQ号，唯一确定一个用户",
 	create_time datetime,
     motify_time datetime,
-    is_delete tinyint,
     index (qq),
     index (user_id),
     primary key (id)

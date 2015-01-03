@@ -10,19 +10,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.key.tools.member.db.dao.UserMapper;
 import com.key.tools.member.db.model.User;
-import com.key.tools.member.service.LocalLoginService;
+import com.key.tools.member.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)  //使用junit4进行测试  
 @ContextConfiguration("classpath:applicationContext.xml")
-public class LocalLoginTest
+public class UserServiceTest
 {
 
 	@Autowired
-	LocalLoginService localLoginService;
+	UserService userService;
 	
 	@Test
 	public void testAdd()
 	{
-		localLoginService.addLocalLogin("test", null, null, "hehe");
+		long id=userService.addUser();
+		System.out.println(id);
 	}
 }

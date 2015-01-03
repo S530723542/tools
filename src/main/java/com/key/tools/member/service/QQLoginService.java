@@ -7,7 +7,7 @@ public interface QQLoginService
 	public int vertifyQQLogin(Integer qq,String password);
 	
 	public int updateQQ(Long userId,Integer qq);
-	
-	public int deleteQQ(Long userId);
+
+	public long loginByQQ(Integer qq ,String password);
 
 }
