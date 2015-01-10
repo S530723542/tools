@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.key.tools.common.Constant;
+import com.key.tools.common.ErrCode;
 import com.key.tools.member.db.dao.QQLoginMapper;
 import com.key.tools.member.db.model.QQLogin;
 import com.key.tools.member.db.model.QQLoginExt;
@@ -52,7 +53,7 @@ public class QQLoginServiceImpl implements QQLoginService
 			{
 				logger.error("[getUserIdByQQ(] : [qq:" + qq + "] [size:"
 						+ list.size() + "] is more than one!");
-				return Constant.MORE_THAN_ONE;
+				return ErrCode.MORE_THAN_ONE;
 			}
 			userId = list.get(0).getUserId();
 		}
@@ -64,7 +65,7 @@ public class QQLoginServiceImpl implements QQLoginService
 	public int vertifyQQLogin(Integer qq, String password)
 	{
 		// TODO Auto-generated method stub
-		return Constant.SUCCESS;
+		return ErrCode.SUCCESS;
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class QQLoginServiceImpl implements QQLoginService
 				logger.error("[updateQQ] : [QQ:" + qq + "] [size:"
 						+ list.size() + "] is more than one!");
 			}
-			return Constant.QQ_EXIST;
+			return ErrCode.QQ_EXIST;
 		}
 
 		QQLogin qqLogin = new QQLogin();
@@ -91,12 +92,12 @@ public class QQLoginServiceImpl implements QQLoginService
 		list = qqLoginMapper.selectBySelective(qqLogin);
 		if (list.size() == 0)
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[updateQQ] : [userId:" + userId + "] [size:"
 					+ list.size() + "] is more than one!");
-			return Constant.MORE_THAN_ONE;
+			return ErrCode.MORE_THAN_ONE;
 		}
 
 		qqLogin = new QQLogin();
@@ -107,7 +108,7 @@ public class QQLoginServiceImpl implements QQLoginService
 		qqLoginMapper.updateByPrimaryKeySelective(qqLogin);
 		logger.info("[updateQQ] : [userId:" + userId + "] [qq:" + qq
 				+ "] SUCCESS!");
-		return Constant.SUCCESS;
+		return ErrCode.SUCCESS;
 	}
 
 
@@ -117,19 +118,19 @@ public class QQLoginServiceImpl implements QQLoginService
 		int qqLoginReturnIdId = vertifyQQLogin(qq, password);
 		switch (qqLoginReturnIdId)
 		{
-		case Constant.QQ_NOT_EXIT:
+		case ErrCode.QQ_NOT_EXIT:
 			logger.info("[loginByQQ] : [qq:" + qq + "] is not exist!");
-			return Constant.QQ_NOT_EXIT;
-		case Constant.QQ_PASSWORD_WRONG:
+			return ErrCode.QQ_NOT_EXIT;
+		case ErrCode.QQ_PASSWORD_WRONG:
 			logger.info("[loginByQQ] : [qq:" + qq + "] password is wrong!");
-			return Constant.QQ_PASSWORD_WRONG;
-		case Constant.SUCCESS:
+			return ErrCode.QQ_PASSWORD_WRONG;
+		case ErrCode.SUCCESS:
 			logger.info("[loginByQQ] : [qq:" + qq + "] login success!");
 			break;
 		default:
 			logger.error("[loginByQQ] : [qqLoginReturnIdId:"
 					+ qqLoginReturnIdId + "] wrong code!");
-			return Constant.SYSTEM_ERROR;
+			return ErrCode.SYSTEM_ERROR;
 		}
 		return getUserIdByQQ(qq);
 	}

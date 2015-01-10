@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.key.tools.common.Constant;
+import com.key.tools.common.ErrCode;
 import com.key.tools.member.db.dao.UserMapper;
 import com.key.tools.member.db.model.User;
 import com.key.tools.member.service.UserService;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService
 							+ list.size()
 							+ "] name is already exist! and more than one!");
 				}
-				return Constant.NAME_EXIST;
+				return ErrCode.NAME_EXIST;
 			}
 		}
 
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService
 							+ list.size()
 							+ "] phone is already exist! and more than one!");
 				}
-				return Constant.PHONE_EXIST;
+				return ErrCode.PHONE_EXIST;
 			}
 		}
 
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService
 							+ list.size()
 							+ "] email is already exist! and more than one!");
 				}
-				return Constant.EMAIL_EXIST;
+				return ErrCode.EMAIL_EXIST;
 			}
 		}
 
@@ -187,7 +188,7 @@ public class UserServiceImpl implements UserService
 		User user = userMapper.selectByPrimaryKey(id);
 		if (user == null || Constant.IS_DELETE.equals(user.getIsDelete()))
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		}
 		User record = new User();
 		record.setId(id);
@@ -195,7 +196,7 @@ public class UserServiceImpl implements UserService
 		Date now = new Date(System.currentTimeMillis());
 		record.setMotifyTime(now);
 		userMapper.updateByPrimaryKeySelective(record);
-		return Constant.SUCCESS;
+		return ErrCode.SUCCESS;
 	}
 
 	@Override
@@ -225,7 +226,7 @@ public class UserServiceImpl implements UserService
 							+ list.size()
 							+ "] name is already exist! and more than one!");
 				}
-				return Constant.NAME_EXIST;
+				return ErrCode.NAME_EXIST;
 			}
 		}
 
@@ -250,7 +251,7 @@ public class UserServiceImpl implements UserService
 							+ list.size()
 							+ "] phone is already exist! and more than one!");
 				}
-				return Constant.PHONE_EXIST;
+				return ErrCode.PHONE_EXIST;
 			}
 		}
 
@@ -275,14 +276,14 @@ public class UserServiceImpl implements UserService
 							+ "] [size:" + list.size()
 							+ "] email is already exist! and more than one!");
 				}
-				return Constant.EMAIL_EXIST;
+				return ErrCode.EMAIL_EXIST;
 			}
 		}
 		user.setId(id);
 		Date now = new Date(System.currentTimeMillis());
 		user.setMotifyTime(now);
 		userMapper.updateByPrimaryKeySelective(user);
-		return Constant.SUCCESS;
+		return ErrCode.SUCCESS;
 	}
 
 	@Override
@@ -292,11 +293,11 @@ public class UserServiceImpl implements UserService
 		User user = userMapper.selectByPrimaryKeyForUpdate(id);
 		if (user == null || Constant.IS_DELETE.equals(user.getIsDelete()))
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		}
 		if (!user.getPassword().equals(password))
 		{
-			return Constant.NOT_MATCH;
+			return ErrCode.NOT_MATCH;
 		}
 		User record = new User();
 		record.setId(id);
@@ -305,7 +306,7 @@ public class UserServiceImpl implements UserService
 		record.setPassword(newPassword);
 		userMapper.updateByPrimaryKeySelective(record);
 		logger.info("[motifyPassword] : [id:"+id+"] SUCCESS!");
-		return Constant.SUCCESS;
+		return ErrCode.SUCCESS;
 	}
 
 	@Override
@@ -318,17 +319,17 @@ public class UserServiceImpl implements UserService
 
 		if (list.size() == 0)
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[getUserByName] : [name:" + name + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
-			return Constant.MORE_THAN_ONE;
+			return ErrCode.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (!user.getPassword().equals(password))
 		{
-			return Constant.NOT_MATCH;
+			return ErrCode.NOT_MATCH;
 		} else
 		{
 			return user.getId();
@@ -346,17 +347,17 @@ public class UserServiceImpl implements UserService
 
 		if (list.size() == 0)
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[getUserByName] : [phone:" + phone + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
-			return Constant.MORE_THAN_ONE;
+			return ErrCode.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (!user.getPassword().equals(password))
 		{
-			return Constant.NOT_MATCH;
+			return ErrCode.NOT_MATCH;
 		} else
 		{
 			return user.getId();
@@ -373,17 +374,17 @@ public class UserServiceImpl implements UserService
 
 		if (list.size() == 0)
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[getUserByName] : [email:" + email + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
-			return Constant.MORE_THAN_ONE;
+			return ErrCode.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (!user.getPassword().equals(password))
 		{
-			return Constant.NOT_MATCH;
+			return ErrCode.NOT_MATCH;
 		} else
 		{
 			return user.getId();
@@ -424,23 +425,23 @@ public class UserServiceImpl implements UserService
 		List<User> list=userMapper.selectBySelectiveForUpdate(record);
 		if (list.size() == 0)
 		{
-			return Constant.NOT_EXIST;
+			return ErrCode.NOT_EXIST;
 		} else if (list.size() > 1)
 		{
 			logger.error("[setPassword] : [id:" + id + "] [size:"
 					+ list.size() + "] name is exist and more than one!");
-			return Constant.MORE_THAN_ONE;
+			return ErrCode.MORE_THAN_ONE;
 		}
 		User user = list.get(0);
 		if (user.getPassword()!=null)
 		{
-			return Constant.NOT_MATCH;
+			return ErrCode.NOT_MATCH;
 		}
 		user=new User();
 		user.setId(id);
 		user.setPassword(password);
 		userMapper.updateByPrimaryKeySelective(user);
-		return Constant.SUCCESS;
+		return ErrCode.SUCCESS;
 	}
 
 }

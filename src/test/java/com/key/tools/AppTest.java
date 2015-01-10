@@ -1,38 +1,37 @@
 package com.key.tools;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
+import com.key.tools.member.service.QQLoginService;
+import com.key.tools.test.TestService;
+
+
+@RunWith(SpringJUnit4ClassRunner.class)  //使用junit4进行测试  
+@ContextConfiguration("classpath:applicationContext.xml")
+public class AppTest
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+	@Autowired
+	TestService testService;
+	
+	@Test
+	public void updateTest()
+	{
+		try
+		{
+			testService.testForUpdate(1);
+		} catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+	
 }
+
