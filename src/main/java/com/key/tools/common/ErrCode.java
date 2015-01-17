@@ -6,6 +6,8 @@ public class ErrCode
 	public static final int SUCCESS = 0;
 	
 	public static final int SYSTEM_ERROR = -10001;
+	
+	public static final int HTTP_ERROR = -10002;
 
 	public static final int PHONE_EXIST = -12002;
 

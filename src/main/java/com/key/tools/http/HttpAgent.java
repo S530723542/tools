@@ -8,18 +8,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
+
+import com.key.tools.common.ErrCode;
+import com.key.tools.common.RestResult;
 
 public class HttpAgent
 {
@@ -167,10 +171,50 @@ public class HttpAgent
 		return httpPost;
 	}
 	
-	public String postAndRetry(HttpGet httpGet)
+	public RestResult<String> get(HttpGet httpGet)
 	{
-		
-		return null;
+		RestResult<String> result=new RestResult<String>();
+		try
+		{
+			CloseableHttpResponse response=client.execute(httpGet);
+			if (response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK)
+			{
+				
+			}
+			
+		} catch (ClientProtocolException e)
+		{
+			logger.error("ClientProtocolException:",e);
+			result.setErrCode(ErrCode.HTTP_ERROR);
+			result.setErrMsg(e.getMessage());
+		} catch (IOException e)
+		{
+			logger.error("IOException:",e);
+			result.setErrCode(ErrCode.HTTP_ERROR);
+			result.setErrMsg(e.getMessage());
+		}
+		return result;
+	}
+	
+	public RestResult<String> getAndRetry(HttpGet httpGet)
+	{
+		RestResult<String> result=new RestResult<String>();
+		try
+		{
+			CloseableHttpResponse response=client.execute(httpGet);
+			
+		} catch (ClientProtocolException e)
+		{
+			logger.error("ClientProtocolException:",e);
+			result.setErrCode(ErrCode.HTTP_ERROR);
+			result.setErrMsg(e.getMessage());
+		} catch (IOException e)
+		{
+			logger.error("IOException:",e);
+			result.setErrCode(ErrCode.HTTP_ERROR);
+			result.setErrMsg(e.getMessage());
+		}
+		return result;
 	}
 
 	private List<NameValuePair> getParams(Map<String, Object> params)
