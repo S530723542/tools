@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -20,6 +22,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import com.key.tools.common.ErrCode;
@@ -170,51 +173,99 @@ public class HttpAgent
 		httpPost.setEntity(new UrlEncodedFormEntity(list, this.encode));
 		return httpPost;
 	}
-	
-	public RestResult<String> get(HttpGet httpGet)
+
+	public RestResult<String> get(String url, Map<String, Object> params)
+			throws UnsupportedEncodingException
 	{
-		RestResult<String> result=new RestResult<String>();
+		HttpRequestBase httpGet = getHttpGet(url, params);
+		return request(httpGet);
+	}
+
+	public RestResult<String> getAndRetry(String url, Map<String, Object> params)
+			throws UnsupportedEncodingException
+	{
+		HttpRequestBase httpGet = getHttpGet(url, params);
+		return request(httpGet);
+	}
+
+	public RestResult<String> request(HttpRequestBase httpRequestBase)
+	{
+		RestResult<String> result = new RestResult<String>();
 		try
 		{
-			CloseableHttpResponse response=client.execute(httpGet);
-			if (response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK)
+			CloseableHttpResponse response = client.execute(httpRequestBase);
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
 			{
-				
+				logger.error("请求地址：" + httpRequestBase.getURI() + ", 请求方法："
+						+ httpRequestBase.getMethod() + ",STATUS CODE = "
+						+ response.getStatusLine().getStatusCode());
+				result.setErrCode(ErrCode.HTTP_ERROR);
+				result.setErrMsg("STATUS CODE = "
+						+ response.getStatusLine().getStatusCode());
+			} else
+			{
+				HttpEntity entity = response.getEntity();
+				if (entity != null)
+				{
+					String entiStr = EntityUtils.toString(entity, Consts.UTF_8);
+					result.setData(entiStr);
+				} else
+				{
+					result.setData("");
+				}
 			}
-			
+
 		} catch (ClientProtocolException e)
 		{
-			logger.error("ClientProtocolException:",e);
+			logger.error("ClientProtocolException:", e);
 			result.setErrCode(ErrCode.HTTP_ERROR);
 			result.setErrMsg(e.getMessage());
 		} catch (IOException e)
 		{
-			logger.error("IOException:",e);
+			logger.error("IOException:", e);
 			result.setErrCode(ErrCode.HTTP_ERROR);
 			result.setErrMsg(e.getMessage());
 		}
 		return result;
 	}
-	
-	public RestResult<String> getAndRetry(HttpGet httpGet)
+
+	public RestResult<String> requestAndRetry(HttpRequestBase httpRequestBase)
 	{
-		RestResult<String> result=new RestResult<String>();
-		try
+		RestResult<String> result = new RestResult<String>();
+
+		result = request(httpRequestBase);
+		for (int i = 1; i <= retryTimes; i++)
 		{
-			CloseableHttpResponse response=client.execute(httpGet);
-			
-		} catch (ClientProtocolException e)
-		{
-			logger.error("ClientProtocolException:",e);
-			result.setErrCode(ErrCode.HTTP_ERROR);
-			result.setErrMsg(e.getMessage());
-		} catch (IOException e)
-		{
-			logger.error("IOException:",e);
-			result.setErrCode(ErrCode.HTTP_ERROR);
-			result.setErrMsg(e.getMessage());
+			if (ErrCode.SUCCESS == result.getErrCode())
+			{
+				break;
+			}
+			try
+			{
+				Thread.sleep(retryInterval);
+			} catch (InterruptedException e)
+			{
+				logger.error("retry sleep failed!", e);
+			}
+			logger.info("requestAndRetry retry! this is the " + i + " times");
+			result = request(httpRequestBase);
 		}
+
 		return result;
+	}
+
+	public RestResult<String> post(String url, Map<String, Object> params)
+			throws UnsupportedEncodingException
+	{
+		HttpRequestBase httpPost = getHttpPost(url, params);
+		return request(httpPost);
+	}
+
+	public RestResult<String> postAndRetry(String url,
+			Map<String, Object> params) throws UnsupportedEncodingException
+	{
+		HttpRequestBase httpPost = getHttpPost(url, params);
+		return request(httpPost);
 	}
 
 	private List<NameValuePair> getParams(Map<String, Object> params)
@@ -264,4 +315,5 @@ public class HttpAgent
 		}
 		return sb.toString();
 	}
+
 }
