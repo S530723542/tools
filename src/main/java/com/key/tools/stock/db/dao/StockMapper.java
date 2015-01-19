@@ -2,6 +2,7 @@ package com.key.tools.stock.db.dao;
 
 import java.util.List;
 
+import com.key.tools.common.ListRecord;
 import com.key.tools.stock.db.model.Stock;
 
 public interface StockMapper {
@@ -58,4 +59,8 @@ public interface StockMapper {
     int deleteBySelective(Stock record);
     
     List<Stock> selectBySelective(Stock record);
+    
+    long countBySelective(Stock record);
+    
+    List<Stock> selectBySelectiveLimit(ListRecord<Stock> listRecord);
 }

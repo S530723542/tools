@@ -31,4 +31,8 @@ public interface StockService
 	public Stock getStockByExCode(String exchange, String code);
 
 	public int deleteStockByExCode(String exchange, String code);
+	
+	public long count(String exchange);
+	
+	public List<Stock> getStocksByEx(String exchange,int pageNum,int pageSize);
 }

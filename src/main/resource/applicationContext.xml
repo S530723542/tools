@@ -14,5 +14,9 @@
 	<import resource="member/member.xml" />
 	<import resource="stock/stock.xml" />
 	<import resource="test/test.xml" />
-
+	
+	<bean id="httpAgent" class="com.key.tools.http.HttpAgent" init-method="init"
+	destroy-method="destroy">
+	</bean>
+	
 </beans>

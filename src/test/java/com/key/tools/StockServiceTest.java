@@ -26,26 +26,74 @@ public class StockServiceTest
 	@Test
 	public void insert() throws Exception
 	{
-		File sz = new File("D:/gitlab/my/tools/doc/stock/sz.txt");
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				new FileInputStream(sz)));
 		String s = null;
 		String[] ss = null;
 		String value = null;
 		String name;
 		String code = null;
 		String exChange = null;
+		
+		File sz = new File("H:\\github\\tools\\doc\\stock/sz.txt");
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				new FileInputStream(sz),"gbk"));
 		exChange = "sz";
 		while ((s = br.readLine()) != null)
 		{
-			System.out.println(s);
+			if (s.trim().length()==0)
+			{
+				continue;
+			}
+
 			ss = s.split("<|>");
 			value = ss[4];
-			ss = value.split("(|)");
+			ss = value.split("\\(|\\)");
 			name = ss[0];
 			code = ss[1];
-			stockService.addStock(exChange, code, name);
+			System.out.println("****************************");
+			System.out.println(name);
+			System.out.println(code);
+			System.out.println("****************************");
+			try
+			{
+				stockService.addStock(exChange, code, name);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		br.close();
+		
+		
+		///////////////////////////////////////////////////////////////
+		
+		
+		File sh = new File("H:\\github\\tools\\doc\\stock/sh.txt");
+		br = new BufferedReader(new InputStreamReader(
+				new FileInputStream(sh),"gbk"));
+		exChange = "sh";
+		while ((s = br.readLine()) != null)
+		{
+			if (s.trim().length()==0)
+			{
+				continue;
+			}
 
+			ss = s.split("<|>");
+			value = ss[4];
+			ss = value.split("\\(|\\)");
+			name = ss[0];
+			code = ss[1];
+			System.out.println("****************************");
+			System.out.println(name);
+			System.out.println(code);
+			System.out.println("****************************");
+			try
+			{
+				stockService.addStock(exChange, code, name);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		br.close();
 	}

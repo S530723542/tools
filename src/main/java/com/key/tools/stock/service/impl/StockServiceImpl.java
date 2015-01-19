@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.key.tools.common.ErrCode;
+import com.key.tools.common.ListRecord;
+import com.key.tools.common.utils.DBUtils;
 import com.key.tools.stock.db.dao.StockMapper;
 import com.key.tools.stock.db.model.Stock;
 import com.key.tools.stock.pojo.ExCode;
@@ -17,20 +19,20 @@ public class StockServiceImpl implements StockService
 {
 
 	@Autowired
-	StockMapper stockMapper;
+	StockMapper	stockMapper;
 
 	@Override
-	public long addStock(String exCodeString,String name)
+	public long addStock(String exCodeString, String name)
 	{
 		long errCode = ErrCode.SYSTEM_ERROR;
 		ExCode exCode = new ExCode();
 		exCode.parseExCode(exCodeString);
-		errCode = addStock(exCode.getExChange(), exCode.getCode(),name);
+		errCode = addStock(exCode.getExChange(), exCode.getCode(), name);
 		return errCode;
 	}
 
 	@Override
-	public long addStock(String exchange, String code,String name)
+	public long addStock(String exchange, String code, String name)
 	{
 		long errCode = ErrCode.SYSTEM_ERROR;
 		Stock record = new Stock();
@@ -114,6 +116,29 @@ public class StockServiceImpl implements StockService
 		Stock record = new Stock();
 		record.setName(name);
 		return stockMapper.selectBySelective(record);
+	}
+
+	@Override
+	public long count(String exchange)
+	{
+		Stock record = new Stock();
+		record.setStockExchange(exchange);
+		return stockMapper.countBySelective(record);
+	}
+
+	@Override
+	public List<Stock> getStocksByEx(String exchange, int pageNum, int pageSize)
+	{
+		Stock record = new Stock();
+		record.setStockExchange(exchange);
+		ListRecord<Stock> listRecord = new ListRecord<Stock>();
+		listRecord.setData(record);
+		listRecord.setPageSize(pageSize);
+		listRecord.setPageSize(pageSize);
+		int offset = DBUtils.transToOffset(pageNum, pageSize);
+		listRecord.setPageNum(offset);
+		List<Stock> list = stockMapper.selectBySelective(listRecord);
+		return list;
 	}
 
 }

@@ -24,10 +24,13 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.key.tools.common.ErrCode;
 import com.key.tools.common.RestResult;
 
+@Component
 public class HttpAgent
 {
 
@@ -161,7 +164,8 @@ public class HttpAgent
 	public HttpRequestBase getHttpGet(String url, Map<String, Object> params)
 			throws UnsupportedEncodingException
 	{
-		HttpGet httpGet = new HttpGet(createGetUrl(url, params));
+		String urlAll =createGetUrl(url, params);
+		HttpGet httpGet = new HttpGet(urlAll);
 		return httpGet;
 	}
 
