@@ -9,6 +9,8 @@ public class ErrCode
 	
 	public static final int HTTP_ERROR = -10002;
 
+	public static final int MORE_THAN_ONE = -10003;
+	
 	public static final int PHONE_EXIST = -12002;
 
 	public static final int EMAIL_EXIST = -12003;
@@ -25,7 +27,9 @@ public class ErrCode
 
 	public static final int QQ_PASSWORD_WRONG = -13005;
 
-	public static final int MORE_THAN_ONE = -14001;
+	public static final int STOCK_EXIST = -14001;
+	
+	public static final int STOCK_NOT_EXIST = -14002;
 
 	
 }

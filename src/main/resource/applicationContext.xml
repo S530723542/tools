@@ -10,13 +10,9 @@
 	http://www.springframework.org/schema/util 
 	http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
+	<import resource="mybatis/datasrc.xml" />
 	<import resource="member/member.xml" />
+	<import resource="stock/stock.xml" />
+	<import resource="test/test.xml" />
 
-	<context:component-scan base-package="com.key.tools.test"
-		use-default-filters="false">
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Service" />
-	</context:component-scan>
-
-	
 </beans>
