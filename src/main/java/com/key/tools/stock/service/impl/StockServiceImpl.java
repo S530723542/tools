@@ -137,7 +137,7 @@ public class StockServiceImpl implements StockService
 		listRecord.setPageSize(pageSize);
 		int offset = DBUtils.transToOffset(pageNum, pageSize);
 		listRecord.setPageNum(offset);
-		List<Stock> list = stockMapper.selectBySelective(listRecord);
+		List<Stock> list = stockMapper.selectBySelectiveLimit(listRecord);
 		return list;
 	}
 

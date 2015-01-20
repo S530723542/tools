@@ -297,6 +297,10 @@ public class HttpAgent
 		{
 			return null;
 		}
+		if (params.isEmpty())
+		{
+			return url;
+		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(url);
 		sb.append("?");
