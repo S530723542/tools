@@ -5,6 +5,7 @@ public class ListRecord<T>
 	private T	data;
 	private int	pageNum		= 1;
 	private int	pageSize	= 20;
+	private int totalNum;
 
 	public int getPageNum()
 	{
@@ -41,6 +42,16 @@ public class ListRecord<T>
 	public void setData(T data)
 	{
 		this.data = data;
+	}
+
+	public int getTotalNum()
+	{
+		return totalNum;
+	}
+
+	public void setTotalNum(int totalNum)
+	{
+		this.totalNum = totalNum;
 	}
 
 }
