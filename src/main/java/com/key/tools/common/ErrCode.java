@@ -30,6 +30,10 @@ public class ErrCode
 	public static final int STOCK_EXIST = -14001;
 	
 	public static final int STOCK_NOT_EXIST = -14002;
+	
+	public static final int STOCK_COLLECTING_EXIST = -14003;
+	
+	public static final int STOCK_COLLECTING_NOT_EXIST = -14004;
 
 	
 }
