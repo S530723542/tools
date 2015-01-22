@@ -52,6 +52,10 @@ public class ExCode
 				break;
 			}
 		}
+		if (this.code==null)
+		{
+			return null;
+		}
 		return this;
 	}
 
