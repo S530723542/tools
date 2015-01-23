@@ -34,6 +34,10 @@ public class ErrCode
 	public static final int STOCK_COLLECTING_EXIST = -14003;
 	
 	public static final int STOCK_COLLECTING_NOT_EXIST = -14004;
+	
+	public static final int STOCK_COLLECTING_IS_FIRST=-14005;
+	
+	public static final int STOCK_COLLECTING_IS_LAST=-14006;
 
 	
 }

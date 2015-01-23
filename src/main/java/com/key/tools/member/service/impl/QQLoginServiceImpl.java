@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.key.tools.common.Constant;
+import com.key.tools.common.DBConstant;
 import com.key.tools.common.ErrCode;
 import com.key.tools.member.db.dao.QQLoginMapper;
 import com.key.tools.member.db.model.QQLogin;
@@ -33,7 +33,7 @@ public class QQLoginServiceImpl implements QQLoginService
 		QQLoginExt record = new QQLoginExt();
 		long userId = 0;
 		record.setQq(qq);
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		List<QQLogin> list = qqLoginMapper.selectByExtSelectiveForUpdate(record);
 		if (list.size() == 0)
 		{
@@ -74,7 +74,7 @@ public class QQLoginServiceImpl implements QQLoginService
 	{
 		QQLoginExt record = new QQLoginExt();
 		record.setQq(qq);
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		List<QQLogin> list = qqLoginMapper.selectByExtSelectiveForUpdate(record);
 		if (list.size() != 0)
 		{

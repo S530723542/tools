@@ -1,7 +1,10 @@
 package com.key.tools.common;
 
+import java.util.List;
+
 public class ListRecord<T>
 {
+	private List<T>	list;
 	private T	data;
 	private int	pageNum		= 1;
 	private int	pageSize	= 20;
@@ -32,6 +35,17 @@ public class ListRecord<T>
 		{
 			this.pageSize = pageSize;
 		}
+	}
+
+
+	public List<T> getList()
+	{
+		return list;
+	}
+
+	public void setList(List<T> list)
+	{
+		this.list = list;
 	}
 
 	public T getData()

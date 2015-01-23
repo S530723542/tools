@@ -1,6 +1,6 @@
 package com.key.tools.common;
 
-public class Constant
+public class DBConstant
 {
 
 	public static final Byte	IS_AVAILABLE		= 0;

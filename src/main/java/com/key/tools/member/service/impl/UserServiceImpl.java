@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.key.tools.common.Constant;
+import com.key.tools.common.DBConstant;
 import com.key.tools.common.ErrCode;
 import com.key.tools.member.db.dao.UserMapper;
 import com.key.tools.member.db.model.User;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService
 		if (name != null)
 		{
 			User record = new User();
-			record.setIsDelete(Constant.IS_AVAILABLE);
+			record.setIsDelete(DBConstant.IS_AVAILABLE);
 			record.setUserName(name);
 			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService
 		if (phone != null)
 		{
 			User record = new User();
-			record.setIsDelete(Constant.IS_AVAILABLE);
+			record.setIsDelete(DBConstant.IS_AVAILABLE);
 			record.setPhone(phone);
 			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService
 		if (email != null)
 		{
 			User record = new User();
-			record.setIsDelete(Constant.IS_AVAILABLE);
+			record.setIsDelete(DBConstant.IS_AVAILABLE);
 			record.setEmail(email);
 			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService
 			}
 		}
 
-		user.setIsDelete(Constant.IS_AVAILABLE);
+		user.setIsDelete(DBConstant.IS_AVAILABLE);
 		user.setPassword(password);
 		Date now = new Date(System.currentTimeMillis());
 		user.setCreateTime(now);
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService
 	public User getUserByName(String name)
 	{
 		User record = new User();
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		record.setUserName(name);
 		List<User> list = userMapper.selectBySelective(record);
 
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService
 	public User getUserByPhone(Integer phone)
 	{
 		User record = new User();
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		record.setPhone(phone);
 		List<User> list = userMapper.selectBySelective(record);
 
@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService
 	public User getUserByEmail(String email)
 	{
 		User record = new User();
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		record.setEmail(email);
 		List<User> list = userMapper.selectBySelective(record);
 
@@ -186,13 +186,13 @@ public class UserServiceImpl implements UserService
 	{
 
 		User user = userMapper.selectByPrimaryKey(id);
-		if (user == null || Constant.IS_DELETE.equals(user.getIsDelete()))
+		if (user == null || DBConstant.IS_DELETE.equals(user.getIsDelete()))
 		{
 			return ErrCode.NOT_EXIST;
 		}
 		User record = new User();
 		record.setId(id);
-		record.setIsDelete(Constant.IS_DELETE);
+		record.setIsDelete(DBConstant.IS_DELETE);
 		Date now = new Date(System.currentTimeMillis());
 		record.setMotifyTime(now);
 		userMapper.updateByPrimaryKeySelective(record);
@@ -209,7 +209,7 @@ public class UserServiceImpl implements UserService
 		if (name != null)
 		{
 			User record = new User();
-			record.setIsDelete(Constant.IS_AVAILABLE);
+			record.setIsDelete(DBConstant.IS_AVAILABLE);
 			record.setUserName(name);
 			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService
 		if (phone != null)
 		{
 			User record = new User();
-			record.setIsDelete(Constant.IS_AVAILABLE);
+			record.setIsDelete(DBConstant.IS_AVAILABLE);
 			record.setPhone(phone);
 			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
@@ -259,7 +259,7 @@ public class UserServiceImpl implements UserService
 		if (email != null)
 		{
 			User record = new User();
-			record.setIsDelete(Constant.IS_AVAILABLE);
+			record.setIsDelete(DBConstant.IS_AVAILABLE);
 			record.setEmail(email);
 			List<User> list = userMapper.selectBySelectiveForUpdate(record);
 			if (list.size() == 0)
@@ -291,7 +291,7 @@ public class UserServiceImpl implements UserService
 	public int motifyPassword(Long id, String password, String newPassword)
 	{
 		User user = userMapper.selectByPrimaryKeyForUpdate(id);
-		if (user == null || Constant.IS_DELETE.equals(user.getIsDelete()))
+		if (user == null || DBConstant.IS_DELETE.equals(user.getIsDelete()))
 		{
 			return ErrCode.NOT_EXIST;
 		}
@@ -314,7 +314,7 @@ public class UserServiceImpl implements UserService
 	{
 		User record = new User();
 		record.setUserName(name);
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		List<User> list = userMapper.selectBySelective(record);
 
 		if (list.size() == 0)
@@ -342,7 +342,7 @@ public class UserServiceImpl implements UserService
 	{
 		User record = new User();
 		record.setPhone(phone);
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		List<User> list = userMapper.selectBySelective(record);
 
 		if (list.size() == 0)
@@ -369,7 +369,7 @@ public class UserServiceImpl implements UserService
 	{
 		User record = new User();
 		record.setEmail(email);
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		List<User> list = userMapper.selectBySelective(record);
 
 		if (list.size() == 0)
@@ -395,7 +395,7 @@ public class UserServiceImpl implements UserService
 	public long addUser()
 	{
 		User user = new User();
-		user.setIsDelete(Constant.IS_AVAILABLE);
+		user.setIsDelete(DBConstant.IS_AVAILABLE);
 		Date now = new Date(System.currentTimeMillis());
 		user.setCreateTime(now);
 		user.setMotifyTime(now);
@@ -408,7 +408,7 @@ public class UserServiceImpl implements UserService
 	public User getUserById(Long id)
 	{
 		User user=userMapper.selectByPrimaryKey(id);
-		if (user==null||Constant.IS_DELETE.equals(user.getIsDelete()))
+		if (user==null||DBConstant.IS_DELETE.equals(user.getIsDelete()))
 		{
 			return null;
 		}
@@ -421,7 +421,7 @@ public class UserServiceImpl implements UserService
 	{
 		User record=new User();
 		record.setId(id);
-		record.setIsDelete(Constant.IS_AVAILABLE);
+		record.setIsDelete(DBConstant.IS_AVAILABLE);
 		List<User> list=userMapper.selectBySelectiveForUpdate(record);
 		if (list.size() == 0)
 		{
