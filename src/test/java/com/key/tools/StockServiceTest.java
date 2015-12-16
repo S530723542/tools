@@ -32,8 +32,8 @@ public class StockServiceTest
 		String name;
 		String code = null;
 		String exChange = null;
-		
-		File sz = new File("D:/gitlab/my/tools/doc/stock/sz.txt");
+
+		File sz = new File("H:/github/tools/doc/stock/sz.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(sz),"gbk"));
 		exChange = "sz";
@@ -67,7 +67,7 @@ public class StockServiceTest
 		///////////////////////////////////////////////////////////////
 		
 		
-		File sh = new File("D:/gitlab/my/tools/doc/stock/sh.txt");
+		File sh = new File("H:/github/tools/doc/stock/sh.txt");
 		br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(sh),"gbk"));
 		exChange = "sh";
