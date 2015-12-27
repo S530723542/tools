@@ -2,5 +2,5 @@ package com.key.tools.waves;
 
 public enum StockNodeType
 {
-	BUY, SELL, READ, TOBUY, TOSELL,POINT,NORMAL
+	BUY, SELL, READTOBUY, TOBUY, TOSELL,POINT,NORMAL,READTOSELL
 }

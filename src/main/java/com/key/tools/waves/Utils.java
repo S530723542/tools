@@ -3,6 +3,8 @@ package com.key.tools.waves;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -17,20 +19,35 @@ public class Utils
 	{
 		for (int i = 0; i < list.size(); i++)
 		{
-			System.out.println(list.get(i).getType() + "," + list.get(i).getBuyType() + ","
+			System.out.println(list.get(i).getType() + ","
+					+ list.get(i).getBuyType() + ","
 					+ sdf.format(list.get(i).getFirstDay()) + ","
-					+ sdf.format(list.get(i).getLastDay()) + "," + list.get(i).getValue()+","+list.get(i).getCheckValue());
+					+ sdf.format(list.get(i).getLastDay()) + ","
+					+ list.get(i).getValue() + ","
+					+ list.get(i).getCheckValue());
 		}
 	}
 
 	public static List<StockNode> reverseOrder(List<StockNode> list)
 	{
-		List<StockNode> newList = new ArrayList<StockNode>(list.size());
-		for (int i = list.size() - 1; i > -1; i--)
+		Collections.sort(list, new Comparator<StockNode>()
 		{
-			newList.add(list.get(i));
-		}
-		return newList;
+
+			@Override
+			public int compare(StockNode arg0, StockNode arg1)
+			{
+				if (arg0.getFirstDay().after(arg1.getFirstDay()))
+				{
+					return 1;
+				} else if (arg0.getFirstDay().before(arg1.getFirstDay()))
+				{
+					return -1;
+				}
+
+				return 0;
+			}
+		});
+		return list;
 	}
 
 	public static List<StockNode> transToWeekList(List<StockNode> list)

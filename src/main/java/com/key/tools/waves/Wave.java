@@ -34,11 +34,11 @@ public class Wave<T extends Node>
 			T secondNode = list.get(i - 1);
 			T thirdNode = list.get(i);
 
-			if (secondNode.getValue() >= thirdNode.getValue()
+			if (secondNode.getValue() > thirdNode.getValue()
 					&& secondNode.getValue() >= firstNode.getValue())
 			{
 				secondNode.setType(NodeType.TOP);
-			} else if (secondNode.getValue() <= thirdNode.getValue()
+			} else if (secondNode.getValue() < thirdNode.getValue()
 					&& secondNode.getValue() <= firstNode.getValue())
 			{
 				secondNode.setType(NodeType.LOW);

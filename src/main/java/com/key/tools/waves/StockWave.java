@@ -12,9 +12,10 @@ public class StockWave extends Wave<StockNode>
 		super.init(list);
 		initAll(allNodes);
 		initAllId();
-		setReadNode();
+		setReadToBuyNode();
 		setCheckValue();
 		setToBuyNode();
+		setReadToSellNode();
 		setToSellNode();
 		setBuyNode();
 		setSellNodes();
@@ -38,30 +39,30 @@ public class StockWave extends Wave<StockNode>
 
 	private void setSellNodes()
 	{
-//		double value = Double.MAX_VALUE;
+		// double value = Double.MAX_VALUE;
 		List<StockNode> list = getToSellNodes();
 		int j = 0;
 		for (int i = 0; i < allNodes.size(); i++)
 		{
-			if (j>=list.size())
+			if (j >= list.size())
 			{
 				break;
 			}
 			StockNode toSellNode = list.get(j);
-//			if (allNodes.get(i).getBuyType().equals(StockNodeType.BUY))
-//			{
-//				value = allNodes.get(i).getCheckValue();
-//			}
-//			if (allNodes.get(i).getValue() > value)
-//			{
-//				allNodes.get(i).setBuyType(StockNodeType.SELL);
-//				value = Double.MAX_VALUE;
-//			}
+			// if (allNodes.get(i).getBuyType().equals(StockNodeType.BUY))
+			// {
+			// value = allNodes.get(i).getCheckValue();
+			// }
+			// if (allNodes.get(i).getValue() > value)
+			// {
+			// allNodes.get(i).setBuyType(StockNodeType.SELL);
+			// value = Double.MAX_VALUE;
+			// }
 			if (allNodes.get(i).getFirstDay().equals(toSellNode.getLastDay()))
 			{
 				allNodes.get(i).setBuyType(StockNodeType.SELL);
 				j++;
-//				value = Double.MAX_VALUE;
+				// value = Double.MAX_VALUE;
 			}
 		}
 	}
@@ -79,7 +80,7 @@ public class StockWave extends Wave<StockNode>
 		return list;
 	}
 
-	private void setToSellNode()
+	private void setReadToSellNode()
 	{
 		List<StockNode> list = getSpecielNodes();
 
@@ -87,15 +88,14 @@ public class StockWave extends Wave<StockNode>
 		{
 			StockNode firstNode = list.get(i - 1);
 			StockNode secondNode = list.get(i);
-			if (firstNode.getBuyType().equals(StockNodeType.READ))
+			if (firstNode.getBuyType().equals(StockNodeType.READTOBUY))
 			{
-				if (secondNode.getBuyType().equals(StockNodeType.TOBUY))
+
+				if (secondNode.getType().equals(NodeType.TOP))
 				{
-					secondNode.setBuyType(StockNodeType.POINT);
-				} else
-				{
-					secondNode.setBuyType(StockNodeType.TOSELL);
+					secondNode.setBuyType(StockNodeType.READTOSELL);
 				}
+
 			}
 
 		}
@@ -149,18 +149,36 @@ public class StockWave extends Wave<StockNode>
 		}
 	}
 
+	private void setToSellNode()
+	{
+		for (int i = 0; i < originList.size(); i++)
+		{
+			if (originList.get(i).getBuyType().equals(StockNodeType.READTOSELL))
+			{
+
+				originList.get(i + 1).setBuyType(StockNodeType.TOSELL);
+
+				originList.get(i + 1).setCheckValue(
+						originList.get(i).getCheckValue());
+
+			}
+		}
+	}
+
 	private void setToBuyNode()
 	{
 		for (int i = 0; i < originList.size(); i++)
 		{
-			if (originList.get(i).getBuyType().equals(StockNodeType.READ))
+			if (originList.get(i).getBuyType().equals(StockNodeType.READTOBUY))
 			{
-				if (originList.get(i + 1).getValue() < originList.get(i).getCheckValue())
+				if (originList.get(i + 1).getValue() < originList.get(i)
+						.getCheckValue())
 				{
 
 					originList.get(i + 1).setBuyType(StockNodeType.TOBUY);
 
-					originList.get(i + 1).setCheckValue(originList.get(i).getCheckValue());
+					originList.get(i + 1).setCheckValue(
+							originList.get(i).getCheckValue());
 
 				}
 
@@ -177,14 +195,14 @@ public class StockWave extends Wave<StockNode>
 		}
 		for (int i = 1; i < list.size(); i++)
 		{
-			if (list.get(i).getBuyType().equals(StockNodeType.READ))
+			if (list.get(i).getBuyType().equals(StockNodeType.READTOBUY))
 			{
 				list.get(i).setCheckValue(list.get(i - 1).getValue());
 			}
 		}
 	}
 
-	private void setReadNode()
+	private void setReadToBuyNode()
 	{
 		List<StockNode> list = getLowNodes();
 		if (list.size() < 2)
@@ -196,9 +214,11 @@ public class StockWave extends Wave<StockNode>
 		{
 			StockNode firstNode = list.get(i - 1);
 			StockNode secondNode = list.get(i);
-			if (secondNode.getValue() > firstNode.getValue())
+			
+//			secondNode.setBuyType(StockNodeType.READTOBUY);
+			if (secondNode.getValue()> firstNode.getValue())
 			{
-				secondNode.setBuyType(StockNodeType.READ);
+				secondNode.setBuyType(StockNodeType.READTOBUY);
 			}
 		}
 	}
